@@ -3,7 +3,7 @@ from core.config import config
 from core.firebase import initialize_firebase as initalize_firebase
 from contextlib import asynccontextmanager
 from core.logger import logger
-import logging
+from api.v1.user import router as auth_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -17,6 +17,8 @@ app = FastAPI(
     version=config.API_VERSION,
     lifespan=lifespan
 )
+
+app.include_router(auth_router, prefix="/api/v1", tags=["users"])
 
 
 
