@@ -4,7 +4,7 @@ from core.firebase import initialize_firebase as initalize_firebase
 from contextlib import asynccontextmanager
 from core.logger import logger
 from api.v1.user import router as auth_router
-
+from api.v1.search import router as search_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     app.state.db = initalize_firebase()
@@ -19,6 +19,7 @@ app = FastAPI(
 )
 
 app.include_router(auth_router, prefix="/api/v1", tags=["users"])
+app.include_router(search_router, prefix="/api/v1", tags=["search"])
 
 
 
