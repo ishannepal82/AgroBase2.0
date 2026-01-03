@@ -1,13 +1,19 @@
+import { Routes, Route} from "react-router-dom"
+import { Toaster } from "sonner"
+import AuthPage from "./pages/AuthPage"
+import HomePage from "./pages/HomePage"
+import NotFound from "./pages/Intruder"
+import FeedPage from "./pages/FeedPage"
 function App() {
-
   return (
     <>
-      <div className="flex min-h-screen flex-col items-center justify-center bg-green-100 p-4 bg-background">
-        <h1 className="text-4xl font-bold text-green-900 dark:text-green-400">Welcome to AgroBase</h1>
-        <p className="mt-4 text-lg text-green-800 dark:text-green-300">
-          Your ultimate plant database application.
-        </p>
-      </div>
+      <Toaster position="top-right" />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/notfound" element={<NotFound />} />
+        <Route path="/feed" element={<FeedPage />} />
+      </Routes>
     </>
   )
 }

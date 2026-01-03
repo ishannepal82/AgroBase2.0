@@ -9,7 +9,6 @@ import logging
 from helpers.get_db import get_db
 
 
-
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
