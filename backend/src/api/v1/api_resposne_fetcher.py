@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Request, Depends
 from services.response_fetcher import ResponseFetcherService
 
 router = APIRouter()
@@ -14,3 +14,7 @@ def fetch_plants(
         return {"response": response}
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal server error") from e
+    
+# search_plants_by_name
+
+
