@@ -9,8 +9,6 @@ from api.v1.api_resposne_fetcher import router as response_fetcher_router
 from api.v1.ai_router import router as ai_router
 from fastapi.middleware.cors import CORSMiddleware
 
-
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     app.state.db = initalize_firebase()
@@ -34,7 +32,7 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["users"])
 app.include_router(search_router, prefix="/api/v1", tags=["search"])
 app.include_router(response_fetcher_router, prefix="/api/v1", tags=["response_fetcher"])
-app.include_router(ai_router, prefix="/api/v1", tags=["ai"])
+app.include_router(ai_router, prefix="/api/v1/ai", tags=["ai"])
 
 
 

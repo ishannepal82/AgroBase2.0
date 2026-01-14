@@ -1,22 +1,26 @@
 from fastapi import APIRouter, Depends, Request
 from services.ai_service import AIService
 from helpers.get_openrouter import get_openrouter_client
-from helpers.prompt_sanitizer import prompt_sanitizer
-from typing import Optional
 from fastapi.exceptions import HTTPException
-from schemas.PlantPromptRequest import Plant
+from schemas.plant_schema import PlantRequest
+from fastapi import Body
 
 
 router = APIRouter()
 
 @router.post("/plant/info")
-@prompt_sanitizer
 async def get_plant_info(
-    plant: Optional[Plant] = None,
+    # 'embed=True' tells FastAPI to look for a key named "plant" or its alias "prompt"
+    plant: PlantRequest = Body(..., alias="prompt"), 
     client=Depends(get_openrouter_client)
 ):
-    if plant is None:
-        raise HTTPException(status_code=400, detail="Prompt is required")
-    service = AIService(client)
-    reply = service.get_plant_info(prompt=plant)
-    return {"response": reply}
+    try:
+        if not plant.prompt:
+            raise HTTPException(status_code=400, detail="Prompt is required")
+        
+        service = AIService(client)
+        reply = service.get_plant_info(prompt=plant)
+        
+        return {"response": reply}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error")

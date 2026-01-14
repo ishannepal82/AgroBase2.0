@@ -1,17 +1,19 @@
-import React from 'react'
 import type { FeedItem } from '../../types/feed-item.types';
+import { selectedPlantAtom } from '../../atoms/plantAtoms';
+import { useSetAtom } from 'jotai';
 
-export default function PlantInfoModal({ selectedPlant, setSelectedPlant }  : { selectedPlant: FeedItem; setSelectedPlant: React.Dispatch<React.SetStateAction<null>> }) {
+export default function PlantInfoModal({plant, aiInfo}: {plant: FeedItem, aiInfo: any}) {
+    const setSelectedPlant = useSetAtom(selectedPlantAtom);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
         <div 
-        className="bg-white rounded-[2.5rem] max-w-2xl w-full max-h-[90vh] overflow-y-auto relative animate-in zoom-in-95 duration-300 shadow-2xl"
+        className="bg-white rounded-[2.5rem] max-w-4xl w-full max-h-[90vh] overflow-y-auto relative animate-in zoom-in-95 duration-300 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
         >
         {/* Close Button */}
         <button 
-            onClick={() => setSelectedPlant(null)}
             className="absolute top-6 right-6 z-10 bg-slate-100 hover:bg-slate-200 p-2 rounded-full transition-colors"
+            onClick={() => setSelectedPlant(null)}
         >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -22,21 +24,21 @@ export default function PlantInfoModal({ selectedPlant, setSelectedPlant }  : { 
             {/* Image Section */}
             <div className="md:w-1/2 h-64 md:h-auto">
             <img 
-                src={selectedPlant.image_url} 
-                alt={selectedPlant.common_name} 
+                src={plant.image_url} 
+                alt={plant.common_name} 
                 className="w-full h-full object-cover"
             />
             </div>
 
             {/* Content Section */}
             <div className="md:w-1/2 p-8">
-            <span className="text-primary font-bold text-xs uppercase tracking-widest">{selectedPlant.genus}</span>
-            <h2 className="text-3xl font-black mt-2 mb-4">{selectedPlant.common_name}</h2>
+            <span className="text-primary font-bold text-xs uppercase tracking-widest">{plant.genus}</span>
+            <h2 className="text-3xl font-black mt-2 mb-4">{plant.common_name}</h2>
 
             <div className="space-y-6">
                 <div>
                 <h4 className="font-bold text-sm text-slate-400 uppercase tracking-tighter">Primary Benefit</h4>
-                <p className="text-slate-700">{selectedPlant.genus}</p>
+                <p className="text-slate-700">{plant.genus}</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -53,13 +55,12 @@ export default function PlantInfoModal({ selectedPlant, setSelectedPlant }  : { 
                 <div>
                 <h4 className="font-bold text-sm text-slate-400 uppercase tracking-tighter">Quick Tip</h4>
                 <p className="text-sm leading-relaxed text-slate-600 italic">
-                    "Place this plant in your bedroom or workspace to maximize the {selectedPlant.genus.toLowerCase()} effect."
+                    "{aiInfo.toLowerCase()} effect."
                 </p>
                 </div>
 
                 <button 
                 className="w-full bg-primary text-white font-bold py-4 rounded-2xl shadow-lg shadow-green-100 hover:scale-[1.02] transition-transform"
-                onClick={() => setSelectedPlant(null)}
                 >
                 Add to My Collection
                 </button>

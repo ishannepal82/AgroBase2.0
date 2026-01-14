@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 // Placeholder images
 const images = {
@@ -17,7 +17,7 @@ const Hero = () => {
       <div className="absolute bottom-[0%] right-[-10%] w-80 h-80 md:w-[500px] md:h-[500px] bg-primary/20 rounded-full blur-3xl opacity-40 pointer-events-none" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-10 items-center">
           
           {/* --- Left Content --- */}
           <div className="flex flex-col gap-6 text-center lg:text-left relative z-20 order-1">
@@ -25,10 +25,10 @@ const Hero = () => {
             {/* Badge */}
             <div className="animate-fade-up flex justify-center lg:justify-start">
               <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/20 border border-secondary/50 text-primary font-medium text-xs md:text-sm tracking-wide">
-                <span className="relative flex h-2 w-2">
+                <div className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                </span>
+                </div>
                 AgroBase 2.0 Launched
               </span>
             </div>

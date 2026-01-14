@@ -29,7 +29,9 @@ class AIService():
             print(response.choices[0].message.content)
             return response
         except Exception as e:
-            print(repr(e))
             raise RuntimeError("Failed to get plant info")
+        except ValueError as e:
+            raise RuntimeError("Prompt is Required")
+        
         
         

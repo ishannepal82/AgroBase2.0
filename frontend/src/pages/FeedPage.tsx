@@ -1,21 +1,30 @@
-import { Heart, Search, Leaf } from 'lucide-react';
-import React, { useState } from 'react';
+import {Search} from 'lucide-react';
+import { useState } from 'react';
 import Header from '../components/feedpage/header';
 import { useQuery } from '@tanstack/react-query';
 import useFeed from '../hooks/useFeed';
 import type { FeedItem } from '../types/feed-item.types';
 import PlantInfoModal from '../components/feedpage/plant-info-modal';
-const categories = ["All", "Medicinal", "Air Purifying", "Low Light", "Edible", "Succulents"];
+import PlantCard from '../components/feedpage/plant-card';
+import FullScreenLoader from '../components/react-loader';
+import { useAtom } from 'jotai'
+import { selectedPlantAtom, selectedPlantAIAtom } from '../atoms/plantAtoms'
+
 
 export default function FeedPage() {
+
+  const [plant] = useAtom(selectedPlantAtom);
+  const [plantAI] = useAtom(selectedPlantAIAtom);
+
+
+  const categories = ["All", "Medicinal", "Air Purifying", "Low Light", "Edible", "Succulents"];
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedPlant, setSelectedPlant] = useState<FeedItem | null>(null);
 
-  const {fetchFeedItems} = useFeed();
+  const {handlefetchFeedItems} = useFeed();
   const {data, isPending, error} = useQuery({
     queryKey:["feedItems"], 
-    queryFn: fetchFeedItems
+    queryFn: handlefetchFeedItems
   }); 
   console.log("Fetched Feed Items:", data);
   const filteredItems = data?.filter((item: FeedItem) => 
@@ -24,9 +33,17 @@ export default function FeedPage() {
      item.scientific_name.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+   if (isPending) {
+      return <FullScreenLoader />;
+    }
+
+    if (error) {
+      console.log(error) ;
+    }
+
   return (
     <>
-    {selectedPlant && (<PlantInfoModal selectedPlant={selectedPlant} setSelectedPlant={setSelectedPlant} />)}
+   {plantAI && plant && <PlantInfoModal plant={plant} aiInfo={plantAI.choices[0].message.content}/>}
     
     <div className="bg-[#fcfdfb] min-h-screen text-slate-900 font-sans">
       <div className="min-w-full mx-auto py-10 px-4 sm:px-6 lg:px-8">
@@ -40,39 +57,7 @@ export default function FeedPage() {
           <div className="lg:col-span-3">
             <div className="columns-1 sm:columns-3 gap-8 space-y-8">
               {filteredItems?.map((item: FeedItem, index: number) => (
-                <div 
-                  key={item.id} 
-                  className="relative group break-inside-avoid rounded-[2rem] overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 animate-fade-up"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <img 
-                    src={item.image_url} 
-                    alt={item.common_name}
-                    className="w-fit h-fit object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 p-8 flex flex-col justify-end">
-                    <span className="text-primary font-bold text-xs uppercase tracking-tighter mb-1">Key Benefit</span>
-                    <h3 className="text-white text-2xl font-bold mb-4">{item.genus}</h3>
-                    <div className="flex justify-between items-center">
-                        <button className="bg-white text-black px-4 py-2 rounded-full text-xs font-bold"
-                        onClick={() => setSelectedPlant(item)}>Learn More</button>
-                        <Heart className="w-6 h-6 text-white hover:text-red-500 cursor-pointer transition-colors" />
-                    </div>
-                  </div>
-
-                  {/* Always Visible Footer */}
-                  <div className="p-6 flex justify-between items-center group-hover:bg-slate-50 transition-colors">
-                    <div>
-                      <h4 className="font-black text-lg">{item.common_name}</h4>
-                      <p className="text-xs text-slate-400 font-medium italic">Genus: {item.genus.split(' ')[0]} Index</p>
-                    </div>
-                    <div className="bg-slate-100 p-2 rounded-full">
-                        <Leaf className="w-4 h-4 text-slate-400" />
-                    </div>
-                  </div>
-                </div>
+                <PlantCard key={item.id} item={item} index={index} />
               ))}
             </div>
           </div>
