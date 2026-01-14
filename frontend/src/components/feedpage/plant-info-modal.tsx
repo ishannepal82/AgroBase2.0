@@ -1,9 +1,21 @@
 import type { FeedItem } from '../../types/feed-item.types';
 import { selectedPlantAtom } from '../../atoms/plantAtoms';
 import { useSetAtom } from 'jotai';
+import mdConverter from '../../md-converter';
+import { useState, useEffect } from 'react';
 
-export default function PlantInfoModal({plant, aiInfo}: {plant: FeedItem, aiInfo: any}) {
+export default function PlantInfoModal({plant, aiInfo}: {plant: FeedItem, aiInfo: string}) {
     const setSelectedPlant = useSetAtom(selectedPlantAtom);
+    const [htmlContent, setHtmlContent] = useState('');
+
+    useEffect(() => {
+        const converter = async () => {
+            const sanitizedHtml = await mdConverter(aiInfo); 
+            setHtmlContent(sanitizedHtml);
+        }
+        converter();
+    }, [aiInfo]);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
         <div 
@@ -41,22 +53,10 @@ export default function PlantInfoModal({plant, aiInfo}: {plant: FeedItem, aiInfo
                 <p className="text-slate-700">{plant.genus}</p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase">Watering</p>
-                    <p className="text-sm font-bold">Every 2 weeks</p>
-                </div>
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase">Light</p>
-                    <p className="text-sm font-bold">Indirect Sun</p>
-                </div>
-                </div>
-
                 <div>
-                <h4 className="font-bold text-sm text-slate-400 uppercase tracking-tighter">Quick Tip</h4>
-                <p className="text-sm leading-relaxed text-slate-600 italic">
-                    "{aiInfo.toLowerCase()} effect."
-                </p>
+                <h4 className="font-bold text-sm text-slate-400 uppercase tracking-tighter">Info about the Plant</h4>
+                <div className="text-sm leading-relaxed text-slate-600 italic" 
+                dangerouslySetInnerHTML={{__html: htmlContent}}/>
                 </div>
 
                 <button 

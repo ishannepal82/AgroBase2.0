@@ -26,7 +26,7 @@ export default function FeedPage() {
     queryKey:["feedItems"], 
     queryFn: handlefetchFeedItems
   }); 
-  console.log("Fetched Feed Items:", data);
+
   const filteredItems = data?.filter((item: FeedItem) => 
     (activeTab === "All" || item.genus === activeTab) &&
     (item.common_name.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -55,10 +55,10 @@ export default function FeedPage() {
           
           {/* Main Feed */}
           <div className="lg:col-span-3">
-            <div className="columns-1 sm:columns-3 gap-8 space-y-8">
-              {filteredItems?.map((item: FeedItem, index: number) => (
-                <PlantCard key={item.id} item={item} index={index} />
-              ))}
+            <div className="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">
+            {filteredItems?.map((item: FeedItem, index: number) => (
+              <PlantCard key={item.id} item={item} index={index} />
+            ))}
             </div>
           </div>
 

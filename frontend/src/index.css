@@ -11,6 +11,9 @@
     --primary: #77ab54;
     --secondary: #b9db9e;
     --accent: #96d869;
+    height: 100%;
+    margin: 0;
+    padding: 0;
   }
   .dark {
     --text: #eff1ee;
@@ -178,7 +181,7 @@
 }
 
 /* FullScreenLoader.css */
-.loader-overlay {
+/* .loader-overlay {
   position: fixed;
   inset: 0;
   display: flex;
@@ -188,14 +191,14 @@
   background-color: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(12px);
   z-index: 9999;
-}
+} */
 
-.loader-content {
+/* .loader-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-}
+} */
 
 .leaf-pulse {
   animation: pulse-grow 2s infinite ease-in-out;
